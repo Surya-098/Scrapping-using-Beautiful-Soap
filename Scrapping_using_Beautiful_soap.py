@@ -3,20 +3,60 @@ from bs4 import BeautifulSoup
 
 
 class Scrap:
-    url = "https://www.flipkart.com/kitchen-cookware-serveware/lunch-boxes-bottles-and-flasks/water-bottles/pr?sid=upp%2Cf2k%2C0zz&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InZhbHVlQ2FsbG91dCI6eyJtdWx0aVZhbHVlZEF0dHJpYnV0ZSI6eyJrZXkiOiJ2YWx1ZUNhbGxvdXQiLCJpbmZlcmVuY2VUeXBlIjoiVkFMVUVfQ0FMTE9VVCIsInZhbHVlcyI6WyJGcm9tIOKCuTExOSJdLCJ2YWx1ZVR5cGUiOiJNVUxUSV9WQUxVRUQifX0sInRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIldhdGVyIEJvdHRsZXMiXSwidmFsdWVUeXBlIjoiTVVMVElfVkFMVUVEIn19LCJoZXJvUGlkIjp7InNpbmdsZVZhbHVlQXR0cmlidXRlIjp7ImtleSI6Imhlcm9QaWQiLCJpbmZlcmVuY2VUeXBlIjoiUElEIiwidmFsdWUiOiJCT1RGUUZZSkZKUjlaUEdaIiwidmFsdWVUeXBlIjoiU0lOR0xFX1ZBTFVFRCJ9fX19fQ%3D%3D&fm=neo%2Fmerchandising&iid=M_3ad240fe-038d-40ee-afae-27d8b0ba2f2f_4.9SO6PU1JKLWT&ssid=huh0bgh4ao0000001656749216375&otracker=hp_omu_Top%2BOffers_1_4.dealCard.OMU_9SO6PU1JKLWT_3&otracker1=hp_omu_PINNED_neo%2Fmerchandising_Top%2BOffers_NA_dealCard_cc_1_NA_view-all_3&cid=9SO6PU1JKLWT"
+    url = "https://www.flipkart.com/search?q=laptop&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off"
 
-
+    # make a connection with the flipkart.com
     data = requests.get(url)
 
+    # create an object for the class BeautifulSoup and use it with its constructor with data and lxml as decoder
     soup = BeautifulSoup(data.content, 'lxml')
 
+    # method for fetching entire website on the terminal
     def website(self):
         return self.soup.prettify()
 
+    # method to fetch the product name
     def product_name(self):
         product_name = self.soup.find('div', class_='_4rR01T')
-        print(product_name)
         return product_name.text
 
-    
- Scrap.product_name()
+    # method for fetching the star ratings
+    def product_rating(self):
+        product_rating = self.soup.find('div', class_='_3LWZlK')
+        return product_rating.text
+
+    # method to fetch the product price
+    def product_price(self):
+        product_price = self.soup.find('div', class_='_30jeq3 _1_WHN1')
+        return product_price.text
+
+    # method to fetch everything present on the webpage
+    def scrap_everything(self):
+        product_name = []
+        product_ratings = []
+        product_prices = []
+        # itirate over the entire div element to get the data
+        for data in self.soup.findAll('div', class_='_3pLy-c row'):
+            names = data.find('div', class_='_4rR01T')
+            ratings = data.find('div', class_='_3LWZlK')
+            prices = data.find('div', class_='_30jeq3 _1_WHN1')
+            # append the information into the blank list
+            product_name.append(names.text)
+            product_ratings.append(ratings.text)
+            product_prices.append(prices.text)
+        print(product_name)
+        print('#########################################')
+        print(product_ratings)
+        print('#########################################')
+        print(product_prices)
+
+
+# print(Scrap().website())
+
+print(Scrap().product_name())
+
+# print(Scrap().product_rating())
+
+# print(Scrap().product_price())
+
+#Scrap().scrap_everything()
