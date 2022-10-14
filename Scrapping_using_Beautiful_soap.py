@@ -17,3 +17,6 @@ class Scrap:
         product_name = self.soup.find('div', class_='_4rR01T')
         print(product_name)
         return product_name.text
+
+    
+ Scrap.product_name()
